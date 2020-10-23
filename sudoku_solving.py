@@ -1,22 +1,12 @@
 ## This is the sudoku solver
 
 import time
+import Index
+import pygame
 
 # global var
 gCount = 0
 
-#\ the quertion board
-BOARD = [
-    [7,8,0,4,0,0,1,2,0],
-    [6,0,0,0,7,5,0,0,9],
-    [0,0,0,6,0,1,0,7,8],
-    [0,0,7,0,4,0,2,6,0],
-    [0,0,1,0,5,0,9,3,0],
-    [9,0,4,0,6,0,0,0,5],
-    [0,7,0,3,0,0,0,1,2],
-    [1,2,0,0,0,7,4,0,0],
-    [0,4,9,2,0,6,0,0,7]
-]
 
 #\ print the board
 def print_board(bo:list):
@@ -33,7 +23,7 @@ def print_board(bo:list):
 
 
 #\ Find the position need to insert
-def FindEmpty(bo : list)->tuple:
+def FindEmpty(bo : list) -> tuple:
     for row in range(len(bo)):
         for col in range(len(bo[0])):
             if bo[row][col] is 0 : return (row, col)
@@ -58,31 +48,78 @@ def valid(bo : list, num : int, pos : tuple) -> bool :
 
 
 #\ backtracking to solve
-def solve (bo : list):
+def solve ( bo : list,
+            GUI_display : bool = False,
+            body_canvas :object = None,
+            RectList : list = None,
+            myfont : object = None,
+            clock : object = None,
+            screen : object = None,
+            bar_canvas : object = None,
+            skip_all_print : bool = False
+            ) -> bool:
+
 
     # for printing the board
     global gCount
     print(f"iteration = {gCount}")
     gCount += 1
-    print_board(bo)
-    time.sleep(1)
+    if not GUI_display and not skip_all_print:
+        print_board(bo)
+        time.sleep(0.25)
 
     # find the empty space
     find = FindEmpty(bo)
     if not find :
         return True
+    else:
+        (row, col) = find
+
+
+
 
     for num in range(1,10):
+        #\ display on the GUI
+
+        #\ recursive content
         if valid(bo, num, find):
-            bo[find[0]][find[1]] = num
+            bo[row][col] = num
+
+            #\ bar and body canvas
+            if GUI_display:
+                time.sleep(0.1)
+                screen.blit(bar_canvas, (0, 0))
+                screen.blit(body_canvas, (0, Index.FrameY * Index.bar_percentage))
+                InputTextRect = RectList[col*9+row]
+                pygame.draw.rect(body_canvas,
+                                Index.White,
+                                InputTextRect,
+                                0
+                                )
+                text_surface = myfont.render(str(bo[row][col]), True, Index.Green2)
+                body_canvas.blit(text_surface, (InputTextRect.x + Index.blockLenghtX/4, InputTextRect.y))
+                pygame.display.flip()
+                clock.tick(60)
 
             # not find
-            if solve(bo):
+            if solve(bo, GUI_display, body_canvas, RectList, myfont, clock, screen, bar_canvas, skip_all_print):
                 return True
 
             # if no num is valid then solve will return False which makes the recurrsive go back to the previous one to reset and redo
             else:
                 bo[find[0]][find[1]] = 0
+                if GUI_display:
+                    time.sleep(0.1)
+                    screen.blit(bar_canvas, (0, 0))
+                    screen.blit(body_canvas, (0, Index.FrameY * Index.bar_percentage))
+                    InputTextRect = RectList[col*9+row]
+                    pygame.draw.rect(body_canvas,
+                                    Index.Red,
+                                    InputTextRect,
+                                    0
+                                    )
+                    pygame.display.flip()
+                    clock.tick(60)
 
     return False
 
@@ -90,7 +127,7 @@ def solve (bo : list):
 
 #\ main
 if __name__ == "__main__":
-    print_board(BOARD)
-    solve(BOARD)
+    print_board(Index.BOARD)
+    solve(Index.BOARD)
     print("\n################## ANSWER ####################\n")
-    print_board(BOARD)
+    print_board(Index.BOARD)
