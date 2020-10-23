@@ -88,6 +88,7 @@ def solve ( bo : list,
             #\ bar and body canvas
             if GUI_display:
                 time.sleep(0.1)
+                pygame.event.pump()
                 screen.blit(bar_canvas, (0, 0))
                 screen.blit(body_canvas, (0, Index.FrameY * Index.bar_percentage))
                 InputTextRect = RectList[col*9+row]
@@ -110,6 +111,7 @@ def solve ( bo : list,
                 bo[find[0]][find[1]] = 0
                 if GUI_display:
                     time.sleep(0.1)
+                    pygame.event.pump()
                     screen.blit(bar_canvas, (0, 0))
                     screen.blit(body_canvas, (0, Index.FrameY * Index.bar_percentage))
                     InputTextRect = RectList[col*9+row]

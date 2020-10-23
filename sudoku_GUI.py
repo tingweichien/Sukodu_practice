@@ -366,6 +366,7 @@ while not crashed:
         for i in range(len(BOARD)):
             for j in range(len(BOARD[i])):
                 if Original_BOARD[i][j] == 0:
+                    pygame.event.pump() # this is to allow you to move mouse or key during the loop and not interrupt it
                     screen.blit(bar_canvas, (0, 0))
                     screen.blit(body_canvas, (0, Index.FrameY * Index.bar_percentage))
                     pygame.draw.rect(body_canvas,
