@@ -27,20 +27,19 @@ Building GUI by pygame and tkinter
 
 ## Screenshot
 
-### Auto solving
+### 1. Auto solving
 
 ![Auto](https://imgur.com/T1znrqG.gif)
 
-
-### Stop
+### 2. Stop
 
 ![Stop](https://imgur.com/wrKvo9B.gif)
 
-### Checking
+### 3. Checking
 
 ![Checking](https://imgur.com/ZqpmHk6.gif)
 
-### Playing
+### 4. Playing
 
 ![playing](https://imgur.com/qGAZ3cw.png)
 
